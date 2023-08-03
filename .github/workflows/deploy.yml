@@ -1,0 +1,67 @@
+on:
+    workflow_dispatch:
+    repository_dispatch:
+        types:
+            - deploy
+
+name: Deploy Website
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  repository: wipplelang/wipple
+
+            - run: |
+                  rustup toolchain install stable --profile minimal
+                  rustup target add wasm32-unknown-unknown
+
+            - uses: peaceiris/actions-mdbook@v1
+              with:
+                  mdbook-version: "0.4.32"
+
+            - uses: arduino/setup-task@v1
+              with:
+                  version: 3.x
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+            - uses: Swatinem/rust-cache@v2.2.0
+
+            - uses: actions/cache@v3
+              with:
+                  path: |
+                      ~/.task
+                      website/_site
+                      website/playground/dist
+                      website/shared/dist
+
+                  key: ${{ runner.os }}-task-cache
+
+            - run: task website
+              env:
+                  TASK_TEMP_DIR: ~/.task
+                  NODE_OPTIONS: --max-old-space-size=4096
+
+            - uses: actions/upload-pages-artifact@v2
+              with:
+                  path: website/_site/
+
+    deploy:
+        needs: build
+
+        permissions:
+            pages: write
+            id-token: write
+
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v2
