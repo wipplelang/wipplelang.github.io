@@ -4,7 +4,7 @@ on:
         types:
             - deploy
 
-name: Deploy Website
+name: website
 
 jobs:
     build:
