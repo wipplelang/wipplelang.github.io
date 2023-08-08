@@ -46,6 +46,11 @@ jobs:
               env:
                   TASK_TEMP_DIR: ~/.task
                   NODE_OPTIONS: --max-old-space-size=4096
+                  SENTRY_ORG: "${{ secrets.SENTRY_ORG }}"
+                  SENTRY_PROJECT: "${{ secrets.SENTRY_PROJECT }}"
+                  SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+                  VITE_SENTRY_DSN: "${{ secrets.VITE_SENTRY_DSN }}"
+                  VITE_P2P_SERVER: "${{ secrets.VITE_P2P_SERVER }}"
 
             - uses: actions/upload-pages-artifact@v2
               with:
