@@ -28,23 +28,8 @@ jobs:
                   version: 3.x
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-            - uses: Swatinem/rust-cache@v2
-              with:
-                  cache-all-crates: true
-
-            - uses: actions/cache@v3
-              with:
-                  path: |
-                      ~/.task
-                      website/_site
-                      website/playground/dist
-                      website/shared/dist
-
-                  key: ${{ runner.os }}-task-cache
-
             - run: task website
               env:
-                  TASK_TEMP_DIR: ~/.task
                   NODE_OPTIONS: --max-old-space-size=4096
                   SENTRY_ORG: "${{ secrets.SENTRY_ORG }}"
                   SENTRY_PROJECT: "${{ secrets.SENTRY_PROJECT }}"
