@@ -36,6 +36,7 @@ jobs:
                   SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
                   VITE_SENTRY_DSN: "${{ secrets.VITE_SENTRY_DSN }}"
                   VITE_P2P_SERVER: "${{ secrets.VITE_P2P_SERVER }}"
+                  VITE_GA4_ID: "${{ secrets.VITE_GA4_ID }}"
 
             - uses: actions/upload-pages-artifact@v2
               with:
